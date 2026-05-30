@@ -1,4 +1,35 @@
-const products = [];
+const products = [
+    {
+        id: 1,
+        name: "Mouse Gamer",
+        price: 25000,
+        stock: 10
+    },
+    {
+        id: 2,
+        name: "Teclado RGB",
+        price: 45000,
+        stock: 5
+    },
+    {
+        id: 3,
+        name: "Monitor 24 pulgadas",
+        price: 180000,
+        stock: 3
+    },
+    {
+        id: 4,
+        name: "Auriculares HyperX",
+        price: 65000,
+        stock: 8
+    },
+    {
+        id: 5,
+        name: "Webcam Full HD",
+        price: 35000,
+        stock: 12
+    }
+];
 
 export const getAllProductsModel = async () => {
     return products;
@@ -11,9 +42,7 @@ export const getProductByIdModel = async (id) => {
     );
 };
 
-export const createProductModel = async (
-    product
-) => {
+export const createProductModel = async (product) => {
 
     const newProduct = {
         id: Date.now(),
@@ -46,9 +75,7 @@ export const updateProductModel = async (
     return products[index];
 };
 
-export const deleteProductModel = async (
-    id
-) => {
+export const deleteProductModel = async (id) => {
 
     const index = products.findIndex(
         product => product.id == id
