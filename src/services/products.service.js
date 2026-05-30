@@ -2,6 +2,7 @@ import {
     getAllProductsModel,
     getProductByIdModel,
     createProductModel,
+    updateProductModel,
     deleteProductModel
 } from '../models/product.model.js';
 
@@ -22,6 +23,17 @@ export const createProductService = async (
 ) => {
 
     return await createProductModel(product);
+};
+
+export const updateProductService = async (
+    id,
+    product
+) => {
+
+    return await updateProductModel(
+        id,
+        product
+    );
 };
 
 export const deleteProductService = async (

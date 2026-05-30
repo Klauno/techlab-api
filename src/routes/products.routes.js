@@ -1,22 +1,45 @@
-import { Router } from 'express';
+import express from 'express';
 
 import {
     getAllProducts,
     getProductById,
     createProduct,
+    updateProduct,
     deleteProduct
 } from '../controllers/products.controller.js';
 
 import { verifyToken } from '../middlewares/auth.middleware.js';
 
-const router = Router();
+const router = express.Router();
 
-router.get('/', verifyToken, getAllProducts);
+router.get(
+    '/',
+    verifyToken,
+    getAllProducts
+);
 
-router.get('/:id', verifyToken, getProductById);
+router.get(
+    '/:id',
+    verifyToken,
+    getProductById
+);
 
-router.post('/create', verifyToken, createProduct);
+router.post(
+    '/create',
+    verifyToken,
+    createProduct
+);
 
-router.delete('/:id', verifyToken, deleteProduct);
+router.put(
+    '/:id',
+    verifyToken,
+    updateProduct
+);
+
+router.delete(
+    '/:id',
+    verifyToken,
+    deleteProduct
+);
 
 export default router;

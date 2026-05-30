@@ -1,13 +1,10 @@
-let products = [];
+const products = [];
 
 export const getAllProductsModel = async () => {
-
     return products;
 };
 
-export const getProductByIdModel = async (
-    id
-) => {
+export const getProductByIdModel = async (id) => {
 
     return products.find(
         product => product.id == id
@@ -25,14 +22,41 @@ export const createProductModel = async (
 
     products.push(newProduct);
 
-    return newProduct.id;
+    return newProduct;
+};
+
+export const updateProductModel = async (
+    id,
+    updatedData
+) => {
+
+    const index = products.findIndex(
+        product => product.id == id
+    );
+
+    if (index === -1) {
+        return null;
+    }
+
+    products[index] = {
+        ...products[index],
+        ...updatedData
+    };
+
+    return products[index];
 };
 
 export const deleteProductModel = async (
     id
 ) => {
 
-    products = products.filter(
-        product => product.id != id
+    const index = products.findIndex(
+        product => product.id == id
     );
+
+    if (index === -1) {
+        return null;
+    }
+
+    return products.splice(index, 1)[0];
 };

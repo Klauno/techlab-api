@@ -2,10 +2,14 @@ import {
     getAllProductsService,
     getProductByIdService,
     createProductService,
+    updateProductService,
     deleteProductService
 } from '../services/products.service.js';
 
-export const getAllProducts = async (req, res) => {
+export const getAllProducts = async (
+    req,
+    res
+) => {
 
     try {
 
@@ -58,14 +62,49 @@ export const createProduct = async (
 
     try {
 
-        const product = req.body;
-
-        const id =
-            await createProductService(product);
+        const product =
+            await createProductService(
+                req.body
+            );
 
         res.status(201).json({
             message: 'Producto creado',
-            id
+            id: product.id
+        });
+
+    } catch (error) {
+
+        res.status(500).json({
+            message: 'Error del servidor'
+        });
+    }
+};
+
+export const updateProduct = async (
+    req,
+    res
+) => {
+
+    try {
+
+        const { id } = req.params;
+
+        const updatedProduct =
+            await updateProductService(
+                id,
+                req.body
+            );
+
+        if (!updatedProduct) {
+
+            return res.status(404).json({
+                message: 'Producto no encontrado'
+            });
+        }
+
+        res.status(200).json({
+            message: 'Producto actualizado',
+            product: updatedProduct
         });
 
     } catch (error) {
@@ -85,7 +124,15 @@ export const deleteProduct = async (
 
         const { id } = req.params;
 
-        await deleteProductService(id);
+        const deletedProduct =
+            await deleteProductService(id);
+
+        if (!deletedProduct) {
+
+            return res.status(404).json({
+                message: 'Producto no encontrado'
+            });
+        }
 
         res.status(200).json({
             message: 'Producto eliminado'
