@@ -1,89 +1,75 @@
-const products = [
-    {
-        id: 1,
-        name: "Mouse Gamer",
-        price: 25000,
-        stock: 10
-    },
-    {
-        id: 2,
-        name: "Teclado RGB",
-        price: 45000,
-        stock: 5
-    },
-    {
-        id: 3,
-        name: "Monitor 24 pulgadas",
-        price: 180000,
-        stock: 3
-    },
-    {
-        id: 4,
-        name: "Auriculares HyperX",
-        price: 65000,
-        stock: 8
-    },
-    {
-        id: 5,
-        name: "Webcam Full HD",
-        price: 35000,
-        stock: 12
-    }
-];
+import { db } from "../config/firebase.js";
+
+const productsCollection = db.collection("products");
 
 export const getAllProductsModel = async () => {
+    const snapshot = await productsCollection.get();
+
+    const products = [];
+    snapshot.forEach((doc) => {
+        products.push({
+            id: doc.id,
+            ...doc.data()
+        });
+    });
+
     return products;
 };
 
 export const getProductByIdModel = async (id) => {
+    const docRef = productsCollection.doc(id);
+    const docSnap = await docRef.get();
 
-    return products.find(
-        product => product.id == id
-    );
+    if (!docSnap.exists) {
+        return null;
+    }
+
+    return {
+        id: docSnap.id,
+        ...docSnap.data()
+    };
 };
 
 export const createProductModel = async (product) => {
+    const docRef = await productsCollection.add(product);
 
-    const newProduct = {
-        id: Date.now(),
+    return {
+        id: docRef.id,
         ...product
     };
-
-    products.push(newProduct);
-
-    return newProduct;
 };
 
-export const updateProductModel = async (
-    id,
-    updatedData
-) => {
+export const updateProductModel = async (id, updatedData) => {
+    const docRef = productsCollection.doc(id);
+    const docSnap = await docRef.get();
 
-    const index = products.findIndex(
-        product => product.id == id
-    );
-
-    if (index === -1) {
+    if (!docSnap.exists) {
         return null;
     }
 
-    products[index] = {
-        ...products[index],
+    await docRef.update(updatedData);
+
+    return {
+        id,
+        ...docSnap.data(),
         ...updatedData
     };
-
-    return products[index];
 };
 
 export const deleteProductModel = async (id) => {
+    const docRef = productsCollection.doc(id);
+    const docSnap = await docRef.get();
 
-    const index = products.findIndex(
-        product => product.id == id
-    );
-
-    if (index === -1) {
+    if (!docSnap.exists) {
         return null;
     }
 
-    return products.splice(index, 1)[0];
+    const deleted = {
+        id: docSnap.id,
+        ...docSnap.data()
+    };
+
+    await docRef.delete();
+
+    return deleted;
 };
