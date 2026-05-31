@@ -1,26 +1,32 @@
-# TechLab API
+# 🚀 TechLab API
 
-API REST desarrollada con Node.js y Express para la gestión de productos, implementando autenticación mediante JWT y arquitectura por capas.
-
-## Tecnologías utilizadas
-
-* Node.js
-* Express
-* JWT (jsonwebtoken)
-* Dotenv
-* Cors
-* Body Parser
-* Firebase Firestore (Firebase Admin SDK)
+API REST desarrollada con Node.js y Express para la gestión de productos.  
+Incluye autenticación mediante JWT, arquitectura por capas y conexión a Firebase Firestore mediante Firebase Admin SDK.  
+También incluye un modelo local (`product.model.local.js`) para pruebas sin base de datos.
 
 ---
 
-## Estructura del proyecto
+## 🧰 Tecnologías utilizadas
+
+* Node.js  
+* Express  
+* Firebase Admin SDK (Firestore)  
+* JSON Web Token (JWT)  
+* Dotenv  
+* CORS  
+* Body Parser  
+
+---
+
+## 📁 Estructura del proyecto
 
 techlab-api/
 │
 ├── src/
 │   ├── config/
-│   │   └── firebase.js
+│   │   ├── firebase.js
+│   │   ├── firebaseAdmin.js
+│   │   └── serviceAccountKey.json   (IGNORADO en Git)
 │   │
 │   ├── controllers/
 │   │   ├── auth.controller.js
@@ -30,7 +36,8 @@ techlab-api/
 │   │   └── auth.middleware.js
 │   │
 │   ├── models/
-│   │   └── product.model.js
+│   │   ├── product.model.js
+│   │   └── product.model.local.js   (para pruebas sin Firestore)
 │   │
 │   ├── routes/
 │   │   ├── auth.routes.js
@@ -42,72 +49,64 @@ techlab-api/
 │   │
 │   └── app.js
 │
+├── index.js
 ├── .env
 ├── .gitignore
-├── index.js
 ├── package.json
 └── README.md
 
 ---
 
-## Instalación
+## ⚙️ Instalación
 
 Clonar el repositorio:
-
 git clone https://github.com/Klauno/techlab-api.git
 
 Ingresar al proyecto:
-
 cd techlab-api
 
 Instalar dependencias:
-
 npm install
 
 ---
 
-## Variables de entorno
+## 🔐 Variables de entorno
 
-Crear un archivo `.env` en la raíz del proyecto.
+Crear un archivo `.env` en la raíz del proyecto:
 
-PORT=3000
-JWT_SECRET=techlab_secret_key
+PORT=3000  
+JWT_SECRET=techlab_secret_key  
 
 ⚠️ Importante:  
-El backend usa Firebase Admin SDK, por lo que NO requiere las variables FIREBASE_API_KEY, AUTH_DOMAIN, PROJECT_ID, etc.
+El backend usa Firebase Admin SDK, por lo que NO utiliza variables como FIREBASE_API_KEY o similares.
 
 ---
 
-## Configuración de Firebase Admin
+## 🔥 Configuración de Firebase Admin
 
 Crear el archivo:
-
 src/config/serviceAccountKey.json
 
 Pegar la clave privada enviada por el autor del proyecto.
 
-⚠️ Este archivo no se incluye en el repositorio por seguridad.
+⚠️ Este archivo NO se incluye en el repositorio por seguridad.
 
 ---
 
-## Ejecutar el proyecto
+## ▶️ Ejecutar el proyecto
 
 npm start
 
-Servidor:
-
+Servidor disponible en:
 http://localhost:3000
 
 ---
 
-## Estado del servidor
-
-### Endpoint
+## ❤️ Estado del servidor
 
 GET /up
 
-### Respuesta
-
+Respuesta:
 {
   "status": "ok",
   "message": "Servidor activo"
@@ -115,143 +114,155 @@ GET /up
 
 ---
 
-# Autenticación
+# 🔑 Autenticación
 
-## Login
+## POST /auth/login
 
-### Endpoint
-
-POST /auth/login
-
-### Body
-
+Body:
 {
   "username": "admin",
   "password": "123456"
 }
 
-### Respuesta
-
+Respuesta:
 {
   "token": "jwt_token"
 }
 
 ---
 
-# Productos
+# 📦 Productos
 
 Todas las rutas requieren JWT.
 
-Agregar en Headers:
-
+Header obligatorio:
 Authorization: Bearer TU_TOKEN
 
 ---
 
-## Obtener todos los productos
-
-GET /api/products
-
-### Respuesta
+## GET /api/products
 
 [
   {
-    "id": "abc123",
-    "name": "Mouse Gamer",
-    "price": 25000,
-    "stock": 10
+    "id": "string",
+    "name": "string",
+    "price": 0,
+    "stock": 0
   }
 ]
 
 ---
 
-## Obtener producto por ID
-
-GET /api/products/:id
-
----
-
-## Crear producto
-
-POST /api/products/create
-
-### Body
+## GET /api/products/:id
 
 {
-  "name": "Teclado RGB",
-  "price": 45000,
-  "stock": 5
+  "id": "string",
+  "name": "string",
+  "price": 0,
+  "stock": 0
 }
 
 ---
 
-## Actualizar producto
-
-PUT /api/products/:id
-
-### Body
-
-{
-  "name": "Teclado RGB Pro",
-  "price": 50000,
-  "stock": 8
-}
-
----
-
-## Eliminar producto
-
-DELETE /api/products/:id
-
----
-
-# Seguridad
-
-La API implementa:
-
-* JSON Web Token (JWT)
-* Middleware de autenticación
-* Protección de rutas privadas
-* Variables de entorno mediante Dotenv
-* Integración con Firebase Firestore mediante Firebase Admin SDK
-
----
-
-# Base de datos
-
-El proyecto utiliza Firebase Firestore como servicio de persistencia de datos.
-
-La colección utilizada es:
-
-products
-
-Cada documento contiene:
+## POST /api/products/create
 
 {
   "name": "string",
-  "price": number,
-  "stock": number
+  "price": 0,
+  "stock": 0
+}
+
+Respuesta:
+{
+  "message": "Producto creado",
+  "id": "string"
 }
 
 ---
 
-# Funcionalidades implementadas
+## PUT /api/products/:id
 
-* Login de usuario
-* Generación de Token JWT
-* Middleware de autenticación
-* CRUD completo de productos
-* Arquitectura por capas
-* Manejo de errores HTTP
-* Protección de endpoints
-* Endpoint de estado del servidor (/up)
-* Integración con Firebase Firestore
-* Variables de entorno mediante Dotenv
+{
+  "name": "string",
+  "price": 0,
+  "stock": 0
+}
+
+Respuesta:
+{
+  "message": "Producto actualizado"
+}
 
 ---
 
-# Autor
+## DELETE /api/products/:id
 
-Claudia Oliverio
+{
+  "message": "Producto eliminado"
+}
 
-Proyecto desarrollado para práctica de Backend con Node.js, Express, JWT y Firebase Firestore.
+---
+
+# 🧪 Modo de prueba local (sin Firestore)
+
+El proyecto incluye un modelo alternativo:
+
+product.model.local.js
+
+Permite probar la API sin conectarse a Firebase.  
+Ideal para desarrollo o pruebas rápidas.
+
+Para usarlo, reemplazar en products.service.js:
+
+const ProductModel = require("../models/product.model");
+
+por:
+
+const ProductModel = require("../models/product.model.local");
+
+---
+
+# 🔒 Seguridad
+
+* Autenticación mediante JWT  
+* Middleware de protección de rutas  
+* Variables de entorno mediante Dotenv  
+* Clave privada de Firebase excluida del repositorio  
+* Firestore gestionado mediante Firebase Admin SDK  
+
+---
+
+# 🗄 Base de datos
+
+Colección utilizada:
+products
+
+Estructura:
+{
+  "name": "string",
+  "price": 0,
+  "stock": 0
+}
+
+---
+
+# ⚙️ Funcionalidades implementadas
+
+* Login de usuario  
+* Generación de Token JWT  
+* Middleware de autenticación  
+* CRUD completo de productos  
+* Arquitectura por capas  
+* Manejo de errores HTTP  
+* Protección de endpoints  
+* Endpoint de estado del servidor (/up)  
+* Integración con Firebase Firestore  
+* Modo local sin base de datos  
+* Variables de entorno mediante Dotenv  
+
+---
+
+# 👨‍💻 Autor
+
+Claudia Oliverio  
+Proyecto desarrollado para práctica de Backend con Node.js, Express, JWT y Firebase Firestore
