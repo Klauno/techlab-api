@@ -8,13 +8,13 @@ También incluye un modelo local (`product.model.local.js`) para pruebas sin bas
 
 ## 🧰 Tecnologías utilizadas
 
-* Node.js  
-* Express  
-* Firebase Admin SDK (Firestore)  
-* JSON Web Token (JWT)  
-* Dotenv  
-* CORS  
-* Body Parser  
+- Node.js  
+- Express  
+- Firebase Admin SDK (Firestore)  
+- JSON Web Token (JWT)  
+- Dotenv  
+- CORS  
+- Body Parser  
 
 ---
 
@@ -26,7 +26,7 @@ techlab-api/
 │   ├── config/
 │   │   ├── firebase.js
 │   │   ├── firebaseAdmin.js
-│   │   └── serviceAccountKey.json   (IGNORADO en Git)
+│   │   └── serviceAccountKey.json (IGNORADO en Git)
 │   │
 │   ├── controllers/
 │   │   ├── auth.controller.js
@@ -37,7 +37,7 @@ techlab-api/
 │   │
 │   ├── models/
 │   │   ├── product.model.js
-│   │   └── product.model.local.js   (para pruebas sin Firestore)
+│   │   └── product.model.local.js
 │   │
 │   ├── routes/
 │   │   ├── auth.routes.js
@@ -59,46 +59,35 @@ techlab-api/
 
 ## ⚙️ Instalación
 
-Clonar el repositorio:
-git clone https://github.com/Klauno/techlab-api.git
-
-Ingresar al proyecto:
-cd techlab-api
-
-Instalar dependencias:
-npm install
+git clone https://github.com/Klauno/techlab-api.git  
+cd techlab-api  
+npm install  
 
 ---
 
 ## 🔐 Variables de entorno
 
-Crear un archivo `.env` en la raíz del proyecto:
-
 PORT=3000  
 JWT_SECRET=techlab_secret_key  
 
-⚠️ Importante:  
-El backend usa Firebase Admin SDK, por lo que NO utiliza variables como FIREBASE_API_KEY o similares.
+⚠️ El backend usa Firebase Admin SDK, no requiere API KEY pública.
 
 ---
 
-## 🔥 Configuración de Firebase Admin
+## 🔥 Configuración Firebase
 
-Crear el archivo:
 src/config/serviceAccountKey.json
 
-Pegar la clave privada enviada por el autor del proyecto.
-
-⚠️ Este archivo NO se incluye en el repositorio por seguridad.
+Agregar credenciales de Firebase Admin.
 
 ---
 
-## ▶️ Ejecutar el proyecto
+## ▶️ Ejecutar proyecto
 
-npm start
+npm start  
 
-Servidor disponible en:
-http://localhost:3000
+Servidor:
+http://localhost:3000  
 
 ---
 
@@ -106,7 +95,6 @@ http://localhost:3000
 
 GET /up
 
-Respuesta:
 {
   "status": "ok",
   "message": "Servidor activo"
@@ -114,29 +102,28 @@ Respuesta:
 
 ---
 
-# 🔑 Autenticación
+## 🔑 Autenticación
 
-## POST /auth/login
+POST /auth/login
 
-Body:
 {
   "username": "admin",
   "password": "123456"
 }
 
 Respuesta:
+
 {
   "token": "jwt_token"
 }
 
 ---
 
-# 📦 Productos
+## 📦 Productos
 
-Todas las rutas requieren JWT.
+⚠️ Requiere JWT
 
-Header obligatorio:
-Authorization: Bearer TU_TOKEN
+Authorization: Bearer TOKEN  
 
 ---
 
@@ -172,12 +159,6 @@ Authorization: Bearer TU_TOKEN
   "stock": 0
 }
 
-Respuesta:
-{
-  "message": "Producto creado",
-  "id": "string"
-}
-
 ---
 
 ## PUT /api/products/:id
@@ -186,11 +167,6 @@ Respuesta:
   "name": "string",
   "price": 0,
   "stock": 0
-}
-
-Respuesta:
-{
-  "message": "Producto actualizado"
 }
 
 ---
@@ -203,41 +179,30 @@ Respuesta:
 
 ---
 
-# 🧪 Modo de prueba local (sin Firestore)
-
-El proyecto incluye un modelo alternativo:
+## 🧪 Modo local (sin Firestore)
 
 product.model.local.js
 
-Permite probar la API sin conectarse a Firebase.  
-Ideal para desarrollo o pruebas rápidas.
-
-Para usarlo, reemplazar en products.service.js:
-
-const ProductModel = require("../models/product.model");
-
-por:
+Cambiar en service:
 
 const ProductModel = require("../models/product.model.local");
 
 ---
 
-# 🔒 Seguridad
+## 🔒 Seguridad
 
-* Autenticación mediante JWT  
-* Middleware de protección de rutas  
-* Variables de entorno mediante Dotenv  
-* Clave privada de Firebase excluida del repositorio  
-* Firestore gestionado mediante Firebase Admin SDK  
+- JWT authentication  
+- Middleware de protección  
+- Variables de entorno  
+- Firebase Admin seguro  
+- Firestore protegido  
 
 ---
 
-# 🗄 Base de datos
+## 🗄 Base de datos
 
-Colección utilizada:
 products
 
-Estructura:
 {
   "name": "string",
   "price": 0,
@@ -246,23 +211,19 @@ Estructura:
 
 ---
 
-# ⚙️ Funcionalidades implementadas
+## ⚙️ Funcionalidades
 
-* Login de usuario  
-* Generación de Token JWT  
-* Middleware de autenticación  
-* CRUD completo de productos  
-* Arquitectura por capas  
-* Manejo de errores HTTP  
-* Protección de endpoints  
-* Endpoint de estado del servidor (/up)  
-* Integración con Firebase Firestore  
-* Modo local sin base de datos  
-* Variables de entorno mediante Dotenv  
+- Login JWT  
+- CRUD productos  
+- PATCH/PUT/DELETE  
+- Arquitectura por capas  
+- Firestore integrado  
+- Modo local sin DB  
+- Protección de rutas  
 
 ---
 
-# 👨‍💻 Autor
+## 👨‍💻 Autor
 
 Claudia Oliverio  
-Proyecto desarrollado para práctica de Backend con Node.js, Express, JWT y Firebase Firestore
+Proyecto backend para práctica con Node.js, Express y Firebase
