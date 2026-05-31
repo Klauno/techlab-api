@@ -15,6 +15,13 @@ app.use('/api/products', productsRoutes);
 
 app.use('/auth', authRoutes);
 
+app.get('/up', (req, res) => {
+    res.status(200).json({
+        status: 'ok',
+        message: 'Servidor activo'
+    });
+});
+
 app.use((req, res) => {
     res.status(404).json({
         message: 'Ruta no encontrada'

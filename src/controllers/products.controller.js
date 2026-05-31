@@ -21,9 +21,11 @@ export const getAllProducts = async (
     } catch (error) {
 
         res.status(500).json({
-            message: 'Error del servidor'
+            message: 'Error interno del servidor'
         });
+
     }
+
 };
 
 export const getProductById = async (
@@ -41,8 +43,10 @@ export const getProductById = async (
         if (!product) {
 
             return res.status(404).json({
-                message: 'Producto no encontrado'
+                message:
+                    'Producto no encontrado'
             });
+
         }
 
         res.status(200).json(product);
@@ -50,9 +54,11 @@ export const getProductById = async (
     } catch (error) {
 
         res.status(500).json({
-            message: 'Error del servidor'
+            message: 'Error interno del servidor'
         });
+
     }
+
 };
 
 export const createProduct = async (
@@ -62,22 +68,45 @@ export const createProduct = async (
 
     try {
 
-        const product =
-            await createProductService(
-                req.body
-            );
+        const {
+            name,
+            price,
+            stock
+        } = req.body;
+
+        if (
+            !name ||
+            price === undefined ||
+            stock === undefined
+        ) {
+
+            return res.status(400).json({
+                message:
+                    'Faltan datos obligatorios'
+            });
+
+        }
+
+        const newProduct =
+            await createProductService({
+                name,
+                price,
+                stock
+            });
 
         res.status(201).json({
             message: 'Producto creado',
-            id: product.id
+            product: newProduct
         });
 
     } catch (error) {
 
         res.status(500).json({
-            message: 'Error del servidor'
+            message: 'Error interno del servidor'
         });
+
     }
+
 };
 
 export const updateProduct = async (
@@ -98,21 +127,27 @@ export const updateProduct = async (
         if (!updatedProduct) {
 
             return res.status(404).json({
-                message: 'Producto no encontrado'
+                message:
+                    'Producto no encontrado'
             });
+
         }
 
         res.status(200).json({
-            message: 'Producto actualizado',
-            product: updatedProduct
+            message:
+                'Producto actualizado',
+            product:
+                updatedProduct
         });
 
     } catch (error) {
 
         res.status(500).json({
-            message: 'Error del servidor'
+            message: 'Error interno del servidor'
         });
+
     }
+
 };
 
 export const deleteProduct = async (
@@ -130,18 +165,25 @@ export const deleteProduct = async (
         if (!deletedProduct) {
 
             return res.status(404).json({
-                message: 'Producto no encontrado'
+                message:
+                    'Producto no encontrado'
             });
+
         }
 
         res.status(200).json({
-            message: 'Producto eliminado'
+            message:
+                'Producto eliminado',
+            product:
+                deletedProduct
         });
 
     } catch (error) {
 
         res.status(500).json({
-            message: 'Error del servidor'
+            message: 'Error interno del servidor'
         });
+
     }
+
 };
