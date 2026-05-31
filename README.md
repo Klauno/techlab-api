@@ -20,6 +20,7 @@ También incluye un modelo local (`product.model.local.js`) para pruebas sin bas
 
 ## 📁 Estructura del proyecto
 
+```
 techlab-api/
 │
 ├── src/
@@ -54,6 +55,8 @@ techlab-api/
 ├── .gitignore
 ├── package.json
 └── README.md
+```
+
 
 ---
 
