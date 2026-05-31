@@ -1,3 +1,4 @@
+// src/models/product.model.js
 import { db } from "../config/firebase.js";
 
 const productsCollection = db.collection("products");

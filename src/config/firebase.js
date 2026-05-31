@@ -1,3 +1,4 @@
+// src/config/firebase.js
 import admin from "firebase-admin";
 import fs from "fs";
 import path from "path";
@@ -18,3 +19,4 @@ admin.initializeApp({
 });
 
 export const db = admin.firestore();
+
