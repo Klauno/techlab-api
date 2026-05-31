@@ -4,12 +4,13 @@ API REST desarrollada con Node.js y Express para la gestión de productos, imple
 
 ## Tecnologías utilizadas
 
-- Node.js
-- Express
-- JWT (jsonwebtoken)
-- Dotenv
-- Cors
-- Body Parser
+* Node.js
+* Express
+* JWT (jsonwebtoken)
+* Dotenv
+* Cors
+* Body Parser
+* Firebase Firestore
 
 ---
 
@@ -79,7 +80,15 @@ Crear un archivo `.env` en la raíz del proyecto.
 
 ```env
 PORT=3000
-JWT_SECRET=techlab_secret
+
+JWT_SECRET=techlab_secret_key
+
+FIREBASE_API_KEY=TU_API_KEY
+FIREBASE_AUTH_DOMAIN=TU_AUTH_DOMAIN
+FIREBASE_PROJECT_ID=TU_PROJECT_ID
+FIREBASE_STORAGE_BUCKET=TU_STORAGE_BUCKET
+FIREBASE_MESSAGING_SENDER_ID=TU_SENDER_ID
+FIREBASE_APP_ID=TU_APP_ID
 ```
 
 ---
@@ -94,6 +103,25 @@ Servidor:
 
 ```text
 http://localhost:3000
+```
+
+---
+
+## Estado del servidor
+
+### Endpoint
+
+```http
+GET /up
+```
+
+### Respuesta
+
+```json
+{
+  "status": "ok",
+  "message": "Servidor activo"
+}
 ```
 
 ---
@@ -216,21 +244,34 @@ DELETE /api/products/:id
 
 La API implementa:
 
-- JSON Web Token (JWT)
-- Middleware de autenticación
-- Protección de rutas privadas
-- Variables de entorno con Dotenv
+* JSON Web Token (JWT)
+* Middleware de autenticación
+* Protección de rutas privadas
+* Variables de entorno mediante Dotenv
+* Preparada para integración con Firebase Firestore
+
+---
+
+# Base de datos
+
+El proyecto se encuentra configurado para utilizar Firebase Firestore como servicio de persistencia de datos.
+
+Actualmente la aplicación posee la configuración de Firebase y una colección de productos creada en Firestore para futuras integraciones con la base de datos en la nube.
 
 ---
 
 # Funcionalidades implementadas
 
-- Login de usuario
-- Generación de Token JWT
-- CRUD completo de productos
-- Arquitectura por capas
-- Manejo de errores
-- Protección de endpoints
+* Login de usuario
+* Generación de Token JWT
+* Middleware de autenticación
+* CRUD completo de productos
+* Arquitectura por capas
+* Manejo de errores HTTP
+* Protección de endpoints
+* Endpoint de estado del servidor (/up)
+* Configuración de Firebase Firestore
+* Variables de entorno mediante Dotenv
 
 ---
 
@@ -238,4 +279,4 @@ La API implementa:
 
 Claudia Oliverio
 
-Proyecto desarrollado para práctica de Backend con Node.js y Express.
+Proyecto desarrollado para práctica de Backend con Node.js, Express, JWT y Firebase Firestore.
