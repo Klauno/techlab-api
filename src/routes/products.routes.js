@@ -1,45 +1,34 @@
-import express from 'express';
+import express from "express";
 
 import {
     getAllProducts,
     getProductById,
     createProduct,
+    createMultipleProducts,
     updateProduct,
+    patchProduct,
     deleteProduct
-} from '../controllers/products.controller.js';
-
-import { verifyToken } from '../middlewares/auth.middleware.js';
+} from "../controllers/products.controller.js";
 
 const router = express.Router();
 
-router.get(
-    '/',
-    verifyToken,
-    getAllProducts
-);
+// GET
+router.get("/", getAllProducts);
+router.get("/:id", getProductById);
 
-router.get(
-    '/:id',
-    verifyToken,
-    getProductById
-);
+// CREATE SINGLE
+router.post("/create", createProduct);
 
-router.post(
-    '/create',
-    verifyToken,
-    createProduct
-);
+// CREATE MULTIPLE (BULK)
+router.post("/bulk", createMultipleProducts);
 
-router.put(
-    '/:id',
-    verifyToken,
-    updateProduct
-);
+// UPDATE
+router.put("/:id", updateProduct);
 
-router.delete(
-    '/:id',
-    verifyToken,
-    deleteProduct
-);
+// PATCH
+router.patch("/:id", patchProduct);
+
+// DELETE
+router.delete("/:id", deleteProduct);
 
 export default router;
