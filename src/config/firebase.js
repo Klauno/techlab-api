@@ -1,22 +1,54 @@
 // src/config/firebase.js
-import admin from "firebase-admin";
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import fetch from "node-fetch";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const projectId = process.env.FIREBASE_PROJECT_ID;
+const apiKey = process.env.FIREBASE_API_KEY;
 
-const serviceAccount = JSON.parse(
-    fs.readFileSync(
-        path.join(__dirname, "serviceAccountKey.json"),
-        "utf8"
-    )
-);
+const baseUrl = `https://firestore.googleapis.com/v1/projects/${projectId}/databases/(default)/documents`;
 
-admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
-});
+export const firebase = {
+  async getAll(collection) {
+    const res = await fetch(`${baseUrl}/${collection}?key=${apiKey}`);
+    return res.json();
+  },
 
-export const db = admin.firestore();
+  async getById(collection, id) {
+    const res = await fetch(`${baseUrl}/${collection}/${id}?key=${apiKey}`);
+    return res.json();
+  },
 
+  async create(collection, data) {
+    const res = await fetch(`${baseUrl}/${collection}?key=${apiKey}`, {
+      method: "POST",
+      body: JSON.stringify({ fields: toFirestore(data) }),
+      headers: { "Content-Type": "application/json" }
+    });
+    return res.json();
+  },
+
+  async update(collection, id, data) {
+    const res = await fetch(`${baseUrl}/${collection}/${id}?key=${apiKey}`, {
+      method: "PATCH",
+      body: JSON.stringify({ fields: toFirestore(data) }),
+      headers: { "Content-Type": "application/json" }
+    });
+    return res.json();
+  },
+
+  async remove(collection, id) {
+    const res = await fetch(`${baseUrl}/${collection}/${id}?key=${apiKey}`, {
+      method: "DELETE"
+    });
+    return res.json();
+  }
+};
+
+function toFirestore(obj) {
+  const result = {};
+  for (const key in obj) {
+    const value = obj[key];
+    if (typeof value === "string") result[key] = { stringValue: value };
+    if (typeof value === "number") result[key] = { integerValue: value };
+  }
+  return result;
+}
