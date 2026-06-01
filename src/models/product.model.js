@@ -1,76 +1,51 @@
 // src/models/product.model.js
-import { db } from "../config/firebase.js";
+import { firebase } from "../config/firebase.js";
 
-const productsCollection = db.collection("products");
+const COLLECTION = "products";
 
-export const getAllProductsModel = async () => {
-    const snapshot = await productsCollection.get();
+export const ProductModel = {
+  async getAll() {
+    const data = await firebase.getAll(COLLECTION);
+    return data.documents?.map(doc => ({
+      id: doc.name.split("/").pop(),
+      ...fromFirestore(doc.fields)
+    })) || [];
+  },
 
-    const products = [];
-    snapshot.forEach((doc) => {
-        products.push({
-            id: doc.id,
-            ...doc.data()
-        });
-    });
-
-    return products;
-};
-
-export const getProductByIdModel = async (id) => {
-    const docRef = productsCollection.doc(id);
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-        return null;
-    }
-
+  async getById(id) {
+    const doc = await firebase.getById(COLLECTION, id);
     return {
-        id: docSnap.id,
-        ...docSnap.data()
+      id,
+      ...fromFirestore(doc.fields)
     };
-};
+  },
 
-export const createProductModel = async (product) => {
-    const docRef = await productsCollection.add(product);
-
+  async create(product) {
+    const doc = await firebase.create(COLLECTION, product);
     return {
-        id: docRef.id,
-        ...product
+      id: doc.name.split("/").pop(),
+      ...product
     };
+  },
+
+  async update(id, product) {
+    await firebase.update(COLLECTION, id, product);
+    return { id, ...product };
+  },
+
+  async remove(id) {
+    await firebase.remove(COLLECTION, id);
+    return { message: "Producto eliminado" };
+  }
 };
 
-export const updateProductModel = async (id, updatedData) => {
-    const docRef = productsCollection.doc(id);
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-        return null;
-    }
-
-    await docRef.update(updatedData);
-
-    return {
-        id,
-        ...docSnap.data(),
-        ...updatedData
-    };
-};
-
-export const deleteProductModel = async (id) => {
-    const docRef = productsCollection.doc(id);
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-        return null;
-    }
-
-    const deleted = {
-        id: docSnap.id,
-        ...docSnap.data()
-    };
-
-    await docRef.delete();
-
-    return deleted;
-};
+function fromFirestore(fields) {
+  if (!fields) return {};
+  const obj = {};
+  for (const key in fields) {
+    const v = fields[key];
+    if (v.stringValue !== undefined) obj[key] = v.stringValue;
+    if (v.integerValue !== undefined) obj[key] = Number(v.integerValue);
+  }
+  return obj;
+}
