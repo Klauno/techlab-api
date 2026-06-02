@@ -1,44 +1,21 @@
-import {
-    getAllProductsModel,
-    getProductByIdModel,
-    createProductModel,
-    updateProductModel,
-    deleteProductModel
-} from '../models/product.model.js';
+import { ProductModel } from "../models/product.model.js";
 
 export const getAllProductsService = async () => {
-
-    return await getAllProductsModel();
+  return await ProductModel.getAll();
 };
 
-export const getProductByIdService = async (
-    id
-) => {
-
-    return await getProductByIdModel(id);
+export const getProductByIdService = async (id) => {
+  return await ProductModel.getById(id);
 };
 
-export const createProductService = async (
-    product
-) => {
-
-    return await createProductModel(product);
+export const createProductService = async (product) => {
+  return await ProductModel.create(product);
 };
 
-export const updateProductService = async (
-    id,
-    product
-) => {
-
-    return await updateProductModel(
-        id,
-        product
-    );
+export const updateProductService = async (id, product) => {
+  return await ProductModel.update(id, product);
 };
 
-export const deleteProductService = async (
-    id
-) => {
-
-    return await deleteProductModel(id);
+export const deleteProductService = async (id) => {
+  return await ProductModel.remove(id);
 };

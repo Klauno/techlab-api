@@ -1,51 +1,33 @@
-// src/models/product.model.js
-import { firebase } from "../config/firebase.js";
+import { db } from "../config/firebase.js";
 
-const COLLECTION = "products";
+const collection = db.collection("products");
 
 export const ProductModel = {
   async getAll() {
-    const data = await firebase.getAll(COLLECTION);
-    return data.documents?.map(doc => ({
-      id: doc.name.split("/").pop(),
-      ...fromFirestore(doc.fields)
-    })) || [];
+    const snapshot = await collection.get();
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
   },
 
   async getById(id) {
-    const doc = await firebase.getById(COLLECTION, id);
-    return {
-      id,
-      ...fromFirestore(doc.fields)
-    };
+    const doc = await collection.doc(id).get();
+    return doc.exists ? { id: doc.id, ...doc.data() } : null;
   },
 
   async create(product) {
-    const doc = await firebase.create(COLLECTION, product);
-    return {
-      id: doc.name.split("/").pop(),
-      ...product
-    };
+    const doc = await collection.add(product);
+    return { id: doc.id, ...product };
   },
 
   async update(id, product) {
-    await firebase.update(COLLECTION, id, product);
+    await collection.doc(id).update(product);
     return { id, ...product };
   },
 
   async remove(id) {
-    await firebase.remove(COLLECTION, id);
-    return { message: "Producto eliminado" };
+    await collection.doc(id).delete();
+    return { id };
   }
 };
-
-function fromFirestore(fields) {
-  if (!fields) return {};
-  const obj = {};
-  for (const key in fields) {
-    const v = fields[key];
-    if (v.stringValue !== undefined) obj[key] = v.stringValue;
-    if (v.integerValue !== undefined) obj[key] = Number(v.integerValue);
-  }
-  return obj;
-}
