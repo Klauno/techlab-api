@@ -10,25 +10,19 @@ import {
     deleteProduct
 } from "../controllers/products.controller.js";
 
+import { verifyToken } from "../middlewares/auth.middleware.js";
+
 const router = express.Router();
 
-// GET
-router.get("/", getAllProducts);
-router.get("/:id", getProductById);
+router.get("/", verifyToken, getAllProducts);
+router.get("/:id", verifyToken, getProductById);
 
-// CREATE SINGLE
-router.post("/create", createProduct);
+router.post("/create", verifyToken, createProduct);
+router.post("/bulk", verifyToken, createMultipleProducts);
 
-// CREATE MULTIPLE (BULK)
-router.post("/bulk", createMultipleProducts);
+router.put("/:id", verifyToken, updateProduct);
+router.patch("/:id", verifyToken, patchProduct);
 
-// UPDATE
-router.put("/:id", updateProduct);
-
-// PATCH
-router.patch("/:id", patchProduct);
-
-// DELETE
-router.delete("/:id", deleteProduct);
+router.delete("/:id", verifyToken, deleteProduct);
 
 export default router;

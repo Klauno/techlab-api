@@ -1,76 +1,33 @@
-// src/models/product.model.js
 import { db } from "../config/firebase.js";
 
-const productsCollection = db.collection("products");
+const collection = db.collection("products");
 
-export const getAllProductsModel = async () => {
-    const snapshot = await productsCollection.get();
+export const ProductModel = {
+  async getAll() {
+    const snapshot = await collection.get();
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    }));
+  },
 
-    const products = [];
-    snapshot.forEach((doc) => {
-        products.push({
-            id: doc.id,
-            ...doc.data()
-        });
-    });
+  async getById(id) {
+    const doc = await collection.doc(id).get();
+    return doc.exists ? { id: doc.id, ...doc.data() } : null;
+  },
 
-    return products;
-};
+  async create(product) {
+    const doc = await collection.add(product);
+    return { id: doc.id, ...product };
+  },
 
-export const getProductByIdModel = async (id) => {
-    const docRef = productsCollection.doc(id);
-    const docSnap = await docRef.get();
+  async update(id, product) {
+    await collection.doc(id).update(product);
+    return { id, ...product };
+  },
 
-    if (!docSnap.exists) {
-        return null;
-    }
-
-    return {
-        id: docSnap.id,
-        ...docSnap.data()
-    };
-};
-
-export const createProductModel = async (product) => {
-    const docRef = await productsCollection.add(product);
-
-    return {
-        id: docRef.id,
-        ...product
-    };
-};
-
-export const updateProductModel = async (id, updatedData) => {
-    const docRef = productsCollection.doc(id);
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-        return null;
-    }
-
-    await docRef.update(updatedData);
-
-    return {
-        id,
-        ...docSnap.data(),
-        ...updatedData
-    };
-};
-
-export const deleteProductModel = async (id) => {
-    const docRef = productsCollection.doc(id);
-    const docSnap = await docRef.get();
-
-    if (!docSnap.exists) {
-        return null;
-    }
-
-    const deleted = {
-        id: docSnap.id,
-        ...docSnap.data()
-    };
-
-    await docRef.delete();
-
-    return deleted;
+  async remove(id) {
+    await collection.doc(id).delete();
+    return { id };
+  }
 };
