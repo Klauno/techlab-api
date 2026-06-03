@@ -3,10 +3,10 @@ dotenv.config();
 
 import app from "./src/app.js";
 
-const PORT = process.env.PORT || 3000;
+//const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, () => {
-    console.log("✅ Servidor iniciado correctamente");
-    console.log(`🚀 Puerto: ${PORT}`);
-    console.log("🔥 Firebase conectado");
-});
+//app.listen(PORT, () => {
+//    console.log("✅ Servidor iniciado correctamente");
+//    console.log(`🚀 Puerto: ${PORT}`);
+//    console.log("🔥 Firebase conectado");
+export default app;
