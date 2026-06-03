@@ -11,7 +11,7 @@ app.use(express.json());
 
 // ruta principal
 app.get("/", (req, res) => {
-    res.status(200).send("🚀 API TechLab funcionando correctamente en Vercel");
+    res.status(200).send("🚀 Bienvenido a TechLab API REST 2026 • Servicio activo y operativo ✔️");
 });
 
 // health check
