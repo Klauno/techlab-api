@@ -80,6 +80,11 @@ FIREBASE_PRIVATE_KEY="tu_private_key"
 ---
 
 ## ▶️ Ejecutar proyecto
+
+## Desarrollo
+npm run dev (con nodemon)
+
+## Producción
 npm start
 
 Servidor:
