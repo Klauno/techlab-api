@@ -1,33 +1,41 @@
 # 🚀 TechLab API
 
-API REST desarrollada con Node.js y Express para la gestión de productos.  
-Incluye autenticación mediante JWT, arquitectura por capas y conexión a Firebase Firestore mediante Firebase Admin SDK.  
-También incluye un modelo local (`product.model.local.js`) para pruebas sin base de datos.
+API REST desarrollada con Node.js y Express para la gestión de productos.
+
+Incluye:
+
+* Autenticación mediante JWT.
+* Arquitectura por capas.
+* Integración con Firebase Firestore.
+* Protección de rutas mediante middleware.
+* Operaciones CRUD completas.
+* Creación masiva de productos.
+* Actualización parcial mediante PATCH.
+* Preparada para despliegue en Vercel.
 
 ---
 
 ## 🧰 Tecnologías utilizadas
 
-- Node.js  
-- Express  
-- Firebase Admin SDK (Firestore)  
-- JSON Web Token (JWT)  
-- Dotenv  
-- CORS  
-- Body Parser  
+* Node.js
+* Express
+* Firebase Admin SDK
+* Firestore
+* JSON Web Token (JWT)
+* Dotenv
+* CORS
+* Body Parser
 
 ---
 
 ## 📁 Estructura del proyecto
 
-```
+```text
 techlab-api/
 │
 ├── src/
 │   ├── config/
-│   │   ├── firebase.js
-│   │   ├── firebaseAdmin.js
-│   │   └── serviceAccountKey.json (IGNORADO en Git)
+│   │   └── firebase.js
 │   │
 │   ├── controllers/
 │   │   ├── auth.controller.js
@@ -54,179 +62,241 @@ techlab-api/
 ├── .env
 ├── .gitignore
 ├── package.json
+├── vercel.json
 └── README.md
 ```
-
 
 ---
 
 ## ⚙️ Instalación
 
-git clone https://github.com/Klauno/techlab-api.git  
-cd techlab-api  
-npm install  
+```bash
+git clone https://github.com/Klauno/techlab-api.git
+
+cd techlab-api
+
+npm install
+```
 
 ---
 
 ## 🔐 Variables de entorno
 
-PORT=3000  
-JWT_SECRET=techlab_secret_key  
+Crear un archivo `.env`
 
-⚠️ El backend usa Firebase Admin SDK, no requiere API KEY pública.
+```env
+PORT=3000
 
----
+JWT_SECRET=techlab_secret_key
 
-## 🔥 Configuración Firebase
-
-src/config/serviceAccountKey.json
-
-Agregar credenciales de Firebase Admin.
+FIREBASE_PROJECT_ID=tu_project_id
+FIREBASE_CLIENT_EMAIL=tu_client_email
+FIREBASE_PRIVATE_KEY="tu_private_key"
+```
 
 ---
 
 ## ▶️ Ejecutar proyecto
 
-npm start  
+```bash
+npm start
+```
 
 Servidor:
-http://localhost:3000  
+
+```text
+http://localhost:3000
+```
 
 ---
 
 ## ❤️ Estado del servidor
 
-GET /up
+### GET /up
 
+Respuesta:
+
+```json
 {
   "status": "ok",
   "message": "Servidor activo"
 }
+```
 
 ---
 
 ## 🔑 Autenticación
 
-POST /auth/login
+### POST /auth/login
 
+Body:
+
+```json
 {
   "username": "admin",
   "password": "123456"
 }
+```
 
 Respuesta:
 
+```json
 {
+  "message": "Login exitoso",
   "token": "jwt_token"
 }
+```
+
+---
+
+## 🔒 Protección de rutas
+
+Todas las rutas de productos requieren JWT.
+
+Header:
+
+```text
+Authorization: Bearer TOKEN
+```
 
 ---
 
 ## 📦 Productos
 
-⚠️ Requiere JWT
+### GET /api/products
 
-Authorization: Bearer TOKEN  
+Obtiene todos los productos.
 
 ---
 
-## GET /api/products
+### GET /api/products/:id
 
+Obtiene un producto por ID.
+
+---
+
+### POST /api/products/create
+
+Crea un producto.
+
+Body:
+
+```json
+{
+  "name": "Producto",
+  "price": 1000,
+  "stock": 10
+}
+```
+
+---
+
+### POST /api/products/bulk
+
+Crea múltiples productos.
+
+Body:
+
+```json
 [
   {
-    "id": "string",
-    "name": "string",
-    "price": 0,
-    "stock": 0
+    "name": "Producto 1",
+    "price": 100,
+    "stock": 10
+  },
+  {
+    "name": "Producto 2",
+    "price": 200,
+    "stock": 5
   }
 ]
+```
 
 ---
 
-## GET /api/products/:id
+### PUT /api/products/:id
 
+Actualiza completamente un producto.
+
+---
+
+### PATCH /api/products/:id
+
+Actualiza parcialmente un producto.
+
+Ejemplo:
+
+```json
 {
-  "id": "string",
-  "name": "string",
-  "price": 0,
-  "stock": 0
+  "price": 1500
 }
+```
 
 ---
 
-## POST /api/products/create
+### DELETE /api/products/:id
 
+Elimina un producto.
+
+Respuesta:
+
+```json
 {
-  "name": "string",
-  "price": 0,
-  "stock": 0
+  "message": "Producto eliminado correctamente"
 }
-
----
-
-## PUT /api/products/:id
-
-{
-  "name": "string",
-  "price": 0,
-  "stock": 0
-}
-
----
-
-## DELETE /api/products/:id
-
-{
-  "message": "Producto eliminado"
-}
-
----
-
-## 🧪 Modo local (sin Firestore)
-
-product.model.local.js
-
-Cambiar en service:
-
-const ProductModel = require("../models/product.model.local");
-
----
-
-## 🔒 Seguridad
-
-- JWT authentication  
-- Middleware de protección  
-- Variables de entorno  
-- Firebase Admin seguro  
-- Firestore protegido  
+```
 
 ---
 
 ## 🗄 Base de datos
 
-products
+Colección Firestore:
 
+```text
+products
+```
+
+Documento:
+
+```json
 {
-  "name": "string",
-  "price": 0,
-  "stock": 0
+  "name": "Producto",
+  "price": 1000,
+  "stock": 10
 }
+```
 
 ---
 
 ## ⚙️ Funcionalidades
 
-- Login JWT  
-- CRUD productos  
-- PATCH/PUT/DELETE  
-- Arquitectura por capas  
-- Firestore integrado  
-- Modo local sin DB  
-- Protección de rutas  
+* Login con JWT
+* Middleware de autenticación
+* CRUD completo de productos
+* Actualización parcial con PATCH
+* Creación masiva con BULK
+* Integración con Firebase Firestore
+* Arquitectura por capas
+* Manejo de errores HTTP
+* Variables de entorno
+* Preparado para Vercel
+
+---
+
+## 🚨 Códigos de estado utilizados
+
+* 200 OK
+* 201 Created
+* 400 Bad Request
+* 401 Unauthorized
+* 403 Forbidden
+* 404 Not Found
+* 500 Internal Server Error
 
 ---
 
 ## 👨‍💻 Autor
 
-Claudia Oliverio  
-Proyecto backend para práctica con Node.js, Express y Firebase
+Claudia Oliverio
+
+Proyecto final de Backend desarrollado con Node.js, Express, JWT y Firebase Firestore para TechLab.

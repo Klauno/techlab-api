@@ -9,9 +9,17 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-
+// ruta principal
 app.get("/", (req, res) => {
     res.status(200).send("🚀 API TechLab funcionando correctamente en Vercel");
+});
+
+// health check
+app.get("/up", (req, res) => {
+    res.status(200).json({
+        status: "ok",
+        message: "Servidor activo 🚀"
+    });
 });
 
 // rutas
